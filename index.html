@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <title>Ρωμαίος vs Ερωφίλη – Δομημένη Αντιπαράθεση</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet"/>
+
   <style>
     /* --- ΒΑΣΙΚΟ CSS --- */
     :root {
@@ -337,14 +341,40 @@
 
     <div class="btn-row no-print">
       <button class="secondary" type="button" data-prev>⟵ Εισαγωγή</button>
-      <button type="button" data-next>Συνέχεια: Αρχική Ψήφος ➜</button>
+      <button type="button" data-next>Συνέχεια: Βίντεο ➜</button>
+    </div>
+  </section>
+
+  <section class="card step">
+    <div style="text-align: center; margin-bottom: 1.5rem;">
+        <h1 style="font-family: 'Great Vibes', cursive; font-size: 3rem; margin: 0; color: #7b1fa2;">The Balcony Scene</h1>
+        <p class="muted">From William Shakespeare's play <em>Romeo and Juliet</em> (Act 2, Scene 2)</p>
+        <p class="muted">Performed by Karen Fishwick and Bally Gill in 2018 at the Royal Shakespeare Company (RSC)</p>
+        <p class="muted">Modern English translation, Panagiotis Domvros, English and Drama Teacher</p>
+    </div>
+
+    <div style="border: 4px solid #7b1fa2; border-radius: 8px; overflow: hidden; margin-bottom: 1rem;">
+        <video controls id="romeo-video" style="width: 100%; display: block;">
+            <source src="Romeo.mp4" type="video/mp4"/>
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <div id="subtitles" style="background: #fafafa; border: 1px solid #ddd; padding: 1rem; border-radius: 8px; text-align: center; min-height: 100px; display: flex; flex-direction: column; justify-content: center;">
+        <p class="original-text" style="font-weight: bold; color: #7b1fa2; margin: 0 0 0.5rem 0; font-size: 1.1rem;"></p>
+        <p class="translation-text" style="color: #555; font-style: italic; margin: 0;"></p>
+    </div>
+
+    <div class="btn-row no-print">
+      <button class="secondary" type="button" data-prev>⟵ Κείμενα</button>
+      <button type="button" data-next>Αρχική Ψήφος ➜</button>
     </div>
   </section>
 
   <section class="card step">
     <h2>Βήμα 2: Αρχική Τοποθέτηση</h2>
     <p>
-      Έχοντας διαβάσει τα κείμενα, ποια αντίληψη για τον έρωτα σας εκφράζει περισσότερο;
+      Έχοντας διαβάσει τα κείμενα και δει το βίντεο, ποια αντίληψη για τον έρωτα σας εκφράζει περισσότερο;
     </p>
 
     <div class="vote-inputs">
@@ -869,6 +899,60 @@
   function togglePhraseBank() {
     const x = document.getElementById('phrase-bank');
     x.style.display = x.style.display === 'none' ? 'block' : 'none';
+  }
+
+  /* --- VIDEO SUBTITLES LOGIC --- */
+  const video = document.getElementById('romeo-video');
+  const originalTextElement = document.querySelector('.original-text');
+  const translationTextElement = document.querySelector('.translation-text');
+  
+  const subtitles = [
+      { start: 2, end: 14, original: "[Romeo] But, soft! What light through yonder window breaks? It is the east and Juliet is the sun.", translation: "[Romeo] But wait! What light is breaking through that window? It is the east, and Juliet is the sun." },
+      { start: 15, end: 26, original: "[Romeo] Arise, fair sun, and kill the envious moon, who is already sick and pale with grief that thou her maid art far more fair than she.", translation: "[Romeo] Rise, beautiful sun, and kill the jealous moon, who is already sick and pale with sadness because you, her attendant, are far more beautiful than she is." },
+      { start: 27, end: 37, original: "[Romeo] Be not her maid, since she is envious. Her vestal livery is but sick and green and none but fools do wear it. Cast it off.", translation: "[Romeo] Don't be her attendant, since she is jealous. Her virgin's uniform is sickly and pale, and only fools wear it. Take it off." },
+      { start: 38, end: 48, original: "[Romeo] It is my lady, O, it is my love! O, that she knew she were!", translation: "[Romeo] It is my lady, Oh, it is my love! Oh, if only she knew she was!" },
+      { start: 49, end: 56, original: "[Romeo] She speaks yet she says nothing. What of that? Her eye discourses. I will answer it.", translation: "[Romeo] She's speaking, but she isn't saying anything. What about it? Her eyes are speaking. I will answer them." },
+      { start: 57, end: 67, original: "[Romeo] I am too bold. 'Tis not to me speaks.", translation: "[Romeo] I am too bold. She is not speaking to me." },
+      { start: 68, end: 74, original: "[Romeo] Two of the fairest stars in all the heaven, having some business, do entreat her eyes to twinkle in their spheres till they return.", translation: "[Romeo] Two of the most beautiful stars in the sky, needing to be elsewhere, have asked her eyes to sparkle in their places until they get back." },
+      { start: 75, end: 82, original: "[Romeo] What if her eyes were there, they in her head? The brightness of her cheek would shame those stars.", translation: "[Romeo] What if her eyes were in the sky, and the stars were in her head? The brightness of her cheeks would make those stars look shameful." },
+      { start: 83, end: 90, original: "[Romeo] See, how she leans a cheek upon her hand! That I were a glove upon that hand that I might touch that cheek!", translation: "[Romeo] Look how she leans her cheek on her hand! Oh, I wish I were a glove on that hand so I could touch that cheek!" },
+      { start: 91, end: 91, original: "[Juliet] Ay me.", translation: "[Juliet] Oh, my." },
+      { start: 92, end: 114, original: "[Romeo] She speaks! O, speak again, bright angel, for thou art as glorious to this night being o'er my head as is a winged messenger of heaven...", translation: "[Romeo] She speaks! Oh, speak again, bright angel, because you are as glorious to this night, being above my head, as an angel from heaven is..." },
+      { start: 115, end: 125, original: "[Juliet] O Romeo, Romeo, wherefore art thou Romeo? Deny thy father and refuse thy name, or, if thou wilt not, be but sworn my love, and I'll no longer be a Capulet.", translation: "[Juliet] Oh Romeo, Romeo, why must you be Romeo? Reject your father and your family name, or, if you won't, just swear you love me, and I will no longer be a Capulet." },
+      { start: 126, end: 127, original: "[Romeo] Shall I hear more, or shall I speak at this?", translation: "[Romeo] Should I listen for more, or should I speak now?" },
+      { start: 128, end: 140, original: "[Juliet] 'Tis but thy name that is my enemy. What's Montague? It is nor hand, nor foot, nor arm, nor face, nor any other part belonging to a man.", translation: "[Juliet] It's only your name that is my enemy. What is a Montague? It isn't a hand, or a foot, or an arm, or a face, or any other part of a man." },
+      { start: 141, end: 146, original: "[Juliet] O, be some other name! What's in a name?", translation: "[Juliet] Oh, have some other name! What's so important about a name?" },
+      { start: 147, end: 149, original: "[Juliet] That which we call a rose by any other word would smell as sweet.", translation: "[Juliet] A rose, even if we called it something else, would still smell as sweet." },
+      { start: 150, end: 157, original: "[Juliet] So Romeo would, were he not Romeo called, retain that dear perfection which he owes without that title.", translation: "[Juliet] It is the same for Romeo; if he weren't called Romeo, he would still keep that wonderful perfection he has without that name." },
+      { start: 158, end: 164, original: "[Juliet] Romeo, doff thy name and for thy name, which is no part of thee, take all myself.", translation: "[Juliet] Romeo, get rid of your name, and in exchange for that name, which isn't even a real part of you, take all of me." },
+      { start: 165, end: 170, original: "[Romeo] I take thee at thy word. Call me but love, and I'll be new baptized. Henceforth I never will be Romeo.", translation: "[Romeo] I believe what you say. Just call me 'love,' and I will be newly christened. From now on, I will never be Romeo again." }
+  ];
+
+  let lastSubtitle = null;
+
+  if (video) {
+      video.addEventListener('timeupdate', () => {
+          const currentTime = video.currentTime;
+          let currentSubtitle = null;
+
+          for (const subtitle of subtitles) {
+              if (currentTime >= subtitle.start && currentTime <= subtitle.end) {
+                  currentSubtitle = subtitle;
+                  break;
+              }
+          }
+
+          if (currentSubtitle !== lastSubtitle) {
+              if (currentSubtitle) {
+                  originalTextElement.innerHTML = currentSubtitle.original;
+                  translationTextElement.innerHTML = currentSubtitle.translation;
+              } else {
+                  originalTextElement.innerHTML = "";
+                  translationTextElement.innerHTML = "";
+              }
+              lastSubtitle = currentSubtitle;
+          }
+      });
   }
 
   // Initial setup
