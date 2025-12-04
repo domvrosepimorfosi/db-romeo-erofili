@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8">
+  <title>Ρωμαίος vs Ερωφίλη – Δομημένη Αντιπαράθεση</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* --- ΒΑΣΙΚΟ CSS --- */
+    :root {
+      --bg: #f7f7fb;
+      --card-bg: #ffffff;
+      /* Μωβ για Ρωμαίο (Λυρισμός/Ουρανός) */
+      --accent: #7b1fa2;
+      --accent-soft: #e1bee7;
+      /* Κόκκινο για Ερωφίλη (Πάθος/Γη/Αίμα) */
+      --accent-alt: #c62828;
+      --text-main: #222222;
+      --text-muted: #555555;
+      --border: #dddddd;
+    }
+
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+    body { margin: 0; background: radial-gradient(circle at top, #fdf5ff 0, #f7f7fb 40%, #f0f0f5 100%); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+    
+    header { padding: 1rem 1rem 0.2rem; text-align: center; flex-shrink: 0; }
+    .title-row { display: flex; align-items: center; justify-content: center; gap: 0.6rem; flex-wrap: wrap; }
+    .site-logo { height: 48px; width: auto; }
+    header h1 { margin: 0.2rem 0; font-size: 1.6rem; color: var(--accent); }
+    header p { margin: 0.1rem 0 0.4rem; color: var(--text-muted); font-size: 1rem; font-weight: 500; text-align: center; width: 100%; }
+    
+    main { max-width: 950px; margin: 0 auto 1.5rem; padding: 0 1rem 1rem; flex-grow: 1; width: 100%; }
+    
+    .step-indicator { display: flex; justify-content: center; gap: 0.4rem; margin: 0.3rem 0 0.8rem; flex-wrap: wrap; }
+    .step-dot { width: 10px; height: 10px; border-radius: 50%; background: #d0c7dc; transition: transform 0.2s, background 0.2s; }
+    .step-dot.active { background: var(--accent); transform: scale(1.2); }
+    
+    .card { background: var(--card-bg); border-radius: 12px; padding: 1.4rem 1.3rem; box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06); border: 1px solid var(--border); margin-bottom: 1rem; }
+    
+    /* --- ΤΡΟΠΟΠΟΙΗΣΕΙΣ ΓΙΑ ΤΗΝ ΕΙΚΟΝΑ & ΤΟ TEXT (INTRO) --- */
+    .intro-slide { 
+      text-align: center; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center; 
+      min-height: calc(100vh - 180px); 
+      padding: 1rem !important;
+    }
+
+    .intro-img { 
+      max-height: 60vh; 
+      max-width: 100%; 
+      width: auto; 
+      object-fit: contain; 
+      border-radius: 8px; 
+      margin-bottom: 1rem; 
+      cursor: zoom-in; 
+      transition: transform 0.2s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .intro-img:hover {
+      transform: scale(1.01);
+    }
+
+    /* Κλάση για Fullscreen λειτουργία */
+    .img-fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.95);
+      z-index: 9999;
+      object-fit: contain;
+      padding: 1rem;
+      box-sizing: border-box;
+      cursor: zoom-out;
+      margin: 0;
+      border-radius: 0;
+      max-height: 100vh !important;
+    }
+
+    .intro-text { 
+      font-size: 1.1rem; 
+      color: var(--text-muted); 
+      max-width: 500px; 
+      margin: 0 auto 1.2rem auto; 
+      text-align: center !important; 
+      line-height: 1.5; 
+    }
+    /* ----------------------------------------------------- */
+
+    .step { display: none; }
+    .step.active { display: block; animation: fadeIn 0.25s ease-out; }
+    @keyframes fadeIn { from {opacity: 0; transform: translateY(6px);} to {opacity: 1; transform: translateY(0);} }
+
+    h2 { margin-top: 0; font-size: 1.3rem; color: var(--accent); }
+    h3 { margin-top: 0.6rem; font-size: 1.05rem; color: var(--text-main); }
+    p { font-size: 0.96rem; line-height: 1.5; text-align: justify; }
+    ul { padding-left: 1.2rem; margin: 0.2rem 0 0.6rem; }
+    li { margin-bottom: 0.25rem; font-size: 0.95rem; text-align: justify; }
+    .muted { color: var(--text-muted); font-size: 0.9rem; }
+
+    .btn-row { display: flex; justify-content: center; margin-top: 0.5rem; gap: 0.5rem; flex-wrap: wrap; width: 100%; }
+    .card .btn-row { justify-content: space-between; margin-top: 1rem; }
+    
+    button { border: none; border-radius: 999px; padding: 0.45rem 1.1rem; font-size: 0.95rem; cursor: pointer; background: var(--accent); color: white; display: inline-flex; align-items: center; gap: 0.35rem; box-shadow: 0 4px 10px rgba(123,31,162,0.2); transition: background 0.15s, transform 0.1s, box-shadow 0.15s; }
+    button.secondary { background: #e0e0e0; color: #333333; box-shadow: none; }
+    button.small { padding: 0.3rem 0.8rem; font-size: 0.85rem; }
+    button:hover { transform: translateY(-1px); box-shadow: 0 5px 14px rgba(123,31,162,0.25); }
+    button.secondary:hover { box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); }
+    button.large-btn { padding: 0.8rem 2rem; font-size: 1.1rem; font-weight: bold; }
+
+    input[type="number"], input[type="text"], textarea, select { width: 100%; padding: 0.4rem 0.55rem; border-radius: 8px; border: 1px solid var(--border); font-size: 0.95rem; margin: 0.2rem 0 0.45rem; outline: none; }
+    textarea { min-height: 70px; resize: vertical; text-align: justify; }
+    input:focus, textarea:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(123,31,162,0.12); }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap: 0.8rem; margin-top: 0.4rem; }
+    .role-box { border-radius: 10px; border: 1px dashed #c1b5d4; padding: 0.6rem 0.7rem; background: #faf5ff; }
+    .role-box.creon { background: #fff4f4; }
+    .role-box.judges { background: #f5f9ff; }
+    .badge { display: inline-block; padding: 0.12rem 0.5rem; border-radius: 999px; font-size: 0.8rem; background: var(--accent-soft); color: #4a148c; margin-bottom: 0.2rem; }
+    .badge.red { background: #ffcdd2; color: #b71c1c; }
+    .badge.blue { background: #bbdefb; color: #0d47a1; }
+
+    .vote-inputs { display: grid; grid-template-columns: repeat(auto-fit,minmax(190px,1fr)); gap: 0.6rem; margin-top: 0.4rem; }
+    .vote-box { border-radius: 10px; padding: 0.5rem 0.6rem; background: #fafafa; border: 1px dashed var(--border); }
+    .vote-results { margin-top: 0.6rem; font-size: 0.92rem; }
+    .bar-chart { margin-top: 0.4rem; display: flex; flex-direction: column; gap: 0.25rem; }
+    .bar-row { display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; }
+    .bar-label { width: 115px; text-align: right; color: var(--text-muted); }
+    .bar-track { flex: 1; background: #eeeaf5; border-radius: 999px; overflow: hidden; height: 12px; }
+    .bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg,#7b1fa2,#ba68c8); min-width: 2%; }
+    .bar-fill.alt { background: linear-gradient(90deg,#c62828,#ef5350); }
+    .bar-fill.neutral { background: linear-gradient(90deg,#546e7a,#90a4ae); }
+
+    .timer-display { font-size: 1.8rem; font-weight: 600; text-align: center; margin: 0.4rem 0 0.6rem; }
+    .inline-inputs { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; margin-top: 0.2rem; }
+    .inline-inputs input[type="number"] { width: 70px; }
+
+    .range-row { margin-bottom: 0.7rem; }
+    .range-row label { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.15rem; }
+    .range-row input[type="range"] { width: 100%; }
+
+    .arg-card { border-radius: 10px; border: 1px dashed var(--border); padding: 0.5rem 0.6rem; margin-top: 0.4rem; background: #fafafa; }
+    .arg-card-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.2rem; color: var(--text-muted); }
+
+    .poll-block { border-radius: 10px; border: 1px dashed var(--border); padding: 0.6rem 0.7rem; background: #fafafa; margin-bottom: 0.8rem; }
+    .likert-row { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: flex-end; margin-top: 0.3rem; }
+    .likert-col { display: flex; flex-direction: column; align-items: center; font-size: 0.8rem; }
+    .likert-col input[type="number"] { width: 54px; text-align: center; padding: 0.25rem 0.4rem; margin: 0; }
+
+    .phrase-bank { margin-top: 0.6rem; border-radius: 10px; border: 1px dashed var(--border); padding: 0.6rem 0.7rem; background: #fdf9ff; font-size: 0.9rem; }
+    details.scenario { margin-top: 0.6rem; border-radius: 10px; border: 1px solid var(--border); background: #fafafa; padding: 0.5rem 0.7rem 0.6rem; }
+    details.scenario[open] { background: #f3ecff; border-color: var(--accent-soft); }
+    details.scenario summary { cursor: pointer; font-weight: 600; font-size: 0.95rem; list-style: none; outline: none; }
+    .scenario-description { margin-top: 0.4rem; font-size: 0.94rem; text-align: justify; }
+    .scenario-notes { margin-top: 0.4rem; }
+
+    .rubric-block { margin-top: 0.6rem; border-radius: 14px; border: 1px solid #d1c4e9; padding: 0.8rem 0.9rem 0.9rem; background: radial-gradient(circle at top left,#f3e5f5 0,#fafafa 40%,#ffffff 100%); }
+    .rubric-table { margin-top: 0.6rem; border-radius: 10px; background: #fdfbff; padding: 0.45rem 0.55rem 0.55rem; }
+    .rubric-row { display: grid; grid-template-columns: 2.4fr 0.9fr 0.9fr; gap: 0.35rem 0.5rem; align-items: center; font-size: 0.9rem; padding: 0.18rem 0; }
+    .rubric-row.header { font-weight: 600; border-bottom: 1px solid #e0d7f3; }
+    .rubric-col-label { text-align: center; font-size: 0.82rem; padding: 0.18rem 0.4rem; border-radius: 999px; }
+    .rubric-col-label.romeo-col { background: #f3e5f5; color: #4a148c; }
+    .rubric-col-label.erophile-col { background: #ffebee; color: #b71c1c; }
+    .rubric-input-romeo { background: #f9f1ff; border-color: #d1c4e9; color: #4a148c; }
+    .rubric-input-erophile { background: #ffebee; border-color: #ffcdd2; color: #b71c1c; }
+    .round-track { width: 100%; height: 14px; background: linear-gradient(90deg,#ffebee,#ede7f6); border-radius: 999px; overflow: hidden; position: relative; }
+    .round-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg,#c62828,#7b1fa2); width: 0%; transition: width 0.35s ease-out; }
+    
+    .text-container {
+        max-height: 500px;
+        overflow-y: auto;
+        padding: 1rem;
+        background: #fafafa;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+    .text-container strong { color: var(--accent); }
+    .text-container em { color: var(--text-muted); font-size: 0.9rem; display: block; margin: 0.5rem 0; }
+    .text-verse { margin-bottom: 0.3rem; display: block; }
+    .speaker-label { font-weight: bold; margin-top: 1rem; display: block; color: var(--text-main); text-decoration: underline; }
+
+    footer { text-align: center; padding: 0.7rem 0.5rem 1.3rem; font-size: 0.8rem; color: var(--text-muted); flex-shrink: 0; }
+    #print-summary { display: none; padding: 1.5rem; max-width: 950px; margin: 0 auto; font-size: 0.96rem; }
+    #print-summary h1, h2 { text-align:center; }
+    
+    @media print {
+      body { background: #ffffff !important; display: block; }
+      header, main, footer, .no-print { display: none !important; }
+      #print-summary { display: block !important; }
+      .text-container { max-height: none; overflow: visible; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="title-row">
+    <img src="greek logo.png" alt="Λογότυπο" class="site-logo">
+    <h1>Ρωμαίος vs Ερωφίλη</h1>
+  </div>
+  <p>Δομημένη Αντιπαράθεση: Ουράνια Μαγεία vs Γήινη Δέσμευση</p>
+  <div class="step-indicator" id="stepIndicator"></div>
+</header>
+
+<main>
+  <section class="step active card intro-slide">
+    <img src="image.png" alt="Cover Image: Romeo vs Erophile" class="intro-img" onclick="toggleFullscreen(this)" title="Κλικ για μεγέθυνση">
+    
+    <div class="intro-text">
+        <strong>Καλώς ορίσατε στη σκηνή της Αναγέννησης.</strong><br><br>
+        Δύο κόσμοι, δύο μορφές έρωτα.<br>
+        Ο ουράνιος θαυμασμός του Ρωμαίου συναντά την επίγεια πίστη της Ερωφίλης.<br>
+        <em>Ετοιμαστείτε να λάβετε θέση.</em>
+    </div>
+    
+    <div class="btn-row no-print">
+        <button class="large-btn" type="button" data-next>🚀 Έναρξη Δραστηριότητας</button>
+    </div>
+  </section>
+
+  <section class="card step">
+    <h2>Βήμα 1: Μελέτη Πηγών</h2>
+    <p>Διαβάστε προσεκτικά τα πλήρη αποσπάσματα από τα δύο έργα.</p>
+
+    <div class="grid-2">
+        <div>
+            <h3>Ρωμαίος και Ιουλιέτα (Πλήρες Κείμενο)</h3>
+            <div class="text-container">
+                <em>Ουίλλιαμ Σαίξπηρ (μτφρ. Ε. Μπελιές)</em>
+                <em>Δεύτερη Πράξη – Σκηνή 2 (Ο κήπος των Καπουλέτων)</em>
+                <em>(Εμφανίζεται ο Ρωμαίος)</em>
+
+                <span class="speaker-label">ΡΩΜΑΙΟΣ</span>
+                <span class="text-verse">Όποιος ποτέ του δεν λαβώθηκε γελάει με τις ουλές των άλλων!</span>
+                <em>(Εμφανίζεται η Ιουλιέτα στο μπαλκόνι)</em>
+                <span class="text-verse">Σιγά! Ποιο φως χαράζει σ’ εκείνο το παράθυρο;</span>
+                <span class="text-verse">Είναι η ανατολή, ο ήλιος μου, η Ιουλιέτα!</span>
+                <span class="text-verse">Πρόβαλε, ωραίε ήλιε, και σκότωσε τη φθονερή σελήνη,</span>
+                <span class="text-verse">που ήδη αρρώστησε και χλόμιασε απ’ το κακό της,</span>
+                <span class="text-verse">γιατί εσύ, η ακόλουθός της, είσαι ομορφότερη!</span>
+                <span class="text-verse">Πάψε να την υπηρετείς, αφού τόσο ζηλεύει:</span>
+                <span class="text-verse">το φόρεμα που βάζουν οι παρθένες της είναι πρασινισμένο,</span>
+                <span class="text-verse">αρρωστημένο – ένδυμα γελωτοποιού ανόητου!</span>
+                <span class="text-verse">Πέταξ’ το από πάνω σου!</span>
+                <span class="text-verse">Ω, ναι, η δέσποινά μου είναι, η αγάπη μου! Αχ, και να το ‘ξερε πως είναι!</span>
+                <span class="text-verse">Μιλάει, κι όμως λέξη δεν βγάζει από το στόμα της!</span>
+                <span class="text-verse">Και τι μ’ αυτό – τα μάτια της μιλάνε: θ’ απαντήσω!</span>
+                <span class="text-verse">Μα τι θράσος έχω! Δεν μιλάει σ’ εμένα:</span>
+                <span class="text-verse">τα δύο ομορφότερα αστέρια τ’ ουρανού πρέπει</span>
+                <span class="text-verse">να λείψουν λίγο και παρακαλούν τα μάτια της</span>
+                <span class="text-verse">να λάμψουνε στις σφαίρες τους ωσότου να γυρίσουν!</span>
+                <span class="text-verse">Τι θα γινόταν εάν τα μάτια της βρισκόντουσαν εκεί ψηλά</span>
+                <span class="text-verse">κι ερχόντουσαν στο πρόσωπό της τ’ άστρα;</span>
+                <span class="text-verse">Τα λαμπερά της μάγουλα θα έκαναν τ’ αστέρια να ντρέπονται,</span>
+                <span class="text-verse">όπως το λυχναράκι ντρέπεται τη μέρα.</span>
+                <span class="text-verse">Τα μάτια της, εκεί ψηλά, ωσάν αιθέριο ποτάμι θ’ ακτινοβολούσαν,</span>
+                <span class="text-verse">και τα πουλιά θα νόμιζαν πως είναι μέρα και θα κελαηδούσαν.</span>
+                <span class="text-verse">Κοίτα πώς ακουμπάει το πρόσωπο στο χέρι:</span>
+                <span class="text-verse">ω, γάντι της να ήμουνα, εγώ να γίνω ταίρι</span>
+                <span class="text-verse">στο μάγουλό της και να την αγγίξω!</span>
+
+                <span class="speaker-label">ΙΟΥΛΙΕΤΑ</span>
+                <span class="text-verse">Αχ, Θέε μου!</span>
+
+                <span class="speaker-label">ΡΩΜΑΙΟΣ</span>
+                <span class="text-verse">Μιλάει! Μίλησε πάλι, άγγελε λαμπρέ,</span>
+                <span class="text-verse">δόξα εσύ της νύχτας πάνω απ’ το κεφάλι μου:</span>
+                <span class="text-verse">μοιάζεις με φτερωτό απεσταλμένο τ’ ουρανού</span>
+                <span class="text-verse">που οι κατάπληκτοι θνητοί κοιτάζουνε με θαυμασμό</span>
+                <span class="text-verse">να ιππεύει νέφη αργοβάδιστα και να διαπλέει</span>
+                <span class="text-verse">τους κόλπους των αιθέρων.</span>
+            </div>
+        </div>
+
+        <div>
+            <h3>Ερωφίλη (Πλήρες Κείμενο)</h3>
+            <div class="text-container">
+                <em>Γεώργιος Χορτάτσης</em>
+                <em>Τρίτη Πράξη - Απόσπασμα Διαλόγου</em>
+
+                <span class="speaker-label">ΕΡΩΦΙΛΗ</span>
+                <span class="text-verse">Τόσες δεν είναι οι ομορφιές, τόσα δεν είν' τα κάλλη,</span>
+                <span class="text-verse">μα τούτο εκ την αγάπη σου γεννάται τη μεγάλη.</span>
+                <span class="text-verse">Μα γή όμορφή 'μαι γή άσκημη, Πανάρετε ψυχή μου,</span>
+                <span class="text-verse">για σέναν εγεννήθηκε στον κόσμο το κορμί μου.</span>
+
+                <span class="speaker-label">ΠΑΝΑΡΕΤΟΣ</span>
+                <span class="text-verse">Νερό δεν έσβησε φωτιά ποτέ, βασίλισσά μου,</span>
+                <span class="text-verse">καθώς τα λόγια τα γροικώ σβήνουσι την πρικιά μου.</span>
+                <span class="text-verse">Μ' όλον ετούτο, αφέντρα μου, μα την αγάπη εκείνη,</span>
+                <span class="text-verse">που μας ανάθρεψε μικρά, και πλια παρ' άλλη εγίνη</span>
+                <span class="text-verse">πιστή και δυνατότατη σ' εμένα κι εις εσένα,</span>
+                <span class="text-verse">και τα κορμιά μας σ'άμετρο πόθο κρατεί δεμένα,</span>
+                <span class="text-verse">περίσσα σε παρακαλώ ποτέ να μην αφήσεις</span>
+                <span class="text-verse">να σε νικήσει ο βασιλιός, να μ' απολησμονήσεις.</span>
+
+                <span class="speaker-label">ΕΡΩΦΙΛΗ</span>
+                <span class="text-verse">Oϊμένα, νά 'βρω δε μπορώ ποιαν αφορμή ποτέ μου</span>
+                <span class="text-verse">σου 'δωκα στην αγάπη μου φόβο, Πανάρετέ μου,</span>
+                <span class="text-verse">να πιάνεις τόσα δυνατό, σα να μηδέ γνωρίζεις</span>
+                <span class="text-verse">το πως το νου και την ψυχή και την καρδιά μου ορίζεις.</span>
+                <span class="text-verse">Έρωτα, απείς τ' αφέντη μου τ' αμμάτια δε μπορούσι</span>
+                <span class="text-verse">πόσα πιστά και σπλαχνικά τον αγαπώ να δούσι,</span>
+                <span class="text-verse">μιαν απού τσι σαΐτες σου φαρμάκεψε και ρίξε</span>
+                <span class="text-verse">μέσα στα φυλλοκάρδια μου και φανερά του δείξε</span>
+                <span class="text-verse">με τον πρικύ μου θάνατο πως ταίρι του απομένω,</span>
+                <span class="text-verse">και μόνο πως για λόγου του στον Άδη κατεβαίνω.</span>
+
+                <span class="speaker-label">ΠΑΝΑΡΕΤΟΣ</span>
+                <span class="text-verse">Τούτο ας γενεί σ' εμένα ομπρός, φόβο κιανένα αν έχω</span>
+                <span class="text-verse">στον πόθο σου, νεράιδα μου, γή αν έν' και δεν κατέχω</span>
+                <span class="text-verse">πως μήδ' ο θάνατος μπορεί να κάμει να σηκώσεις</span>
+                <span class="text-verse">τον πόθο σου από λόγου μου κι αλλού να τόνε δώσεις.</span>
+                <span class="text-verse">Μα δεν κατέχω ποια αφορμή με κάνει και τρομάσσω,</span>
+                <span class="text-verse">το πράμα, που στο χέρι μου κρατώ σφικτά, μη χάσω,</span>
+                <span class="text-verse">κι εκείνο, απού παρηγοριά πρέπει να μου χαρίζει,</span>
+                <span class="text-verse">τσ' ελπίδες μου τσ' αμέτρητες σε φόβο μού γυρίζει.</span>
+
+                <span class="speaker-label">ΕΡΩΦΙΛΗ</span>
+                <span class="text-verse">Τούτό 'ναι απού το ξαφνικό μαντάτο που μας δώσα,</span>
+                <span class="text-verse">μα μην πρικαινομέστανε, Πανάρετέ μου, τόσα,</span>
+                <span class="text-verse">γιατί ουρανός, απού 'καμε κι εσμίξαμεν αντάμι,</span>
+                <span class="text-verse">να στέκομε παντοτινά ταίρια μάς θέλει κάμει.</span>
+                <span class="text-verse">Τον ουρανό, τη θάλασσα, τη γη και τον αέρα,</span>
+                <span class="text-verse">τ' άστρα, τον ήλιο το λαμπρό, τη νύκτα, την ημέρα,</span>
+                <span class="text-verse">παρακαλώ ν' αρματωθού, να 'ρθουν αντίδικά μου,</span>
+                <span class="text-verse">την ώρα οπ' άλλος θέλει μπει πόθος εις την καρδιά μου.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="btn-row no-print">
+      <button class="secondary" type="button" data-prev>⟵ Εισαγωγή</button>
+      <button type="button" data-next>Συνέχεια: Αρχική Ψήφος ➜</button>
+    </div>
+  </section>
+
+  <section class="card step">
+    <h2>Βήμα 2: Αρχική Τοποθέτηση</h2>
+    <p>
+      Έχοντας διαβάσει τα κείμενα, ποια αντίληψη για τον έρωτα σας εκφράζει περισσότερο;
+    </p>
+
+    <div class="vote-inputs">
+      <div class="vote-box">
+        <strong>Υπέρ Ρωμαίου</strong>
+        <p class="muted" style="margin:0; font-size:0.8rem;">(Έρωτας ως φως, θέαση, θαυμασμός & εξιδανίκευση)</p>
+        <input type="number" id="pre-romeo" min="0" value="0">
+      </div>
+      <div class="vote-box">
+        <strong>Υπέρ Ερωφίλης</strong>
+        <p class="muted" style="margin:0; font-size:0.8rem;">(Έρωτας ως μνήμη, όρκος, καρτερικότητα & δέσμευση)</p>
+        <input type="number" id="pre-erophile" min="0" value="0">
+      </div>
+      <div class="vote-box">
+        <strong>Δεν είμαι σίγουρος/η</strong>
+        <input type="number" id="pre-unsure" min="0" value="0">
+      </div>
+    </div>
+
+    <button class="small no-print" type="button" onclick="calculatePreVote()">Υπολογισμός &amp; γράφημα</button>
+
+    <div id="pre-results" class="vote-results"></div>
+    <div id="pre-chart" class="bar-chart"></div>
+
+    <div class="btn-row no-print">
+      <button class="secondary" type="button" data-prev>⟵ Προηγούμενο</button>
+      <button type="button" data-next>Επόμενο: Ομάδες ➜</button>
+    </div>
+  </section>
+
+  <section class="card step">
+    <h2>Βήμα 3: Ομάδες &amp; Ρόλοι Debate</h2>
+    <p>Χωριστείτε σε ομάδες για να υποστηρίξετε τις δύο διαφορετικές θεωρήσεις.</p>
+
+    <div class="grid-2">
+      <div class="role-box">
+        <div class="badge">🎭 Ομάδα Ρωμαίου</div>
+        <p>
+          Υπερασπίζεται τον <strong>Εξιδανικευμένο Έρωτα</strong>. 
+          Χρησιμοποιείστε επιχειρήματα για την ομορφιά που λάμπει («ήλιος», «αστέρια»), 
+          για τη δύναμη της εικόνας («τα μάτια μιλάνε») και για την ανύψωση του αγαπημένου 
+          σε θεϊκό επίπεδο («άγγελος λαμπρός»).
+        </p>
+      </div>
+      <div class="role-box creon">
+        <div class="badge red">⚔️ Ομάδα Ερωφίλης</div>
+        <p>
+          Υπερασπίζεται τον <strong>Βιωματικό Έρωτα</strong>. 
+          Χρησιμοποιείστε επιχειρήματα για τη διάρκεια («μας ανάθρεψε μικρά»), 
+          για τον πόνο και την «πρικιά» που συνοδεύουν το βάθος της αγάπης, 
+          και για την πίστη που νικάει ακόμα και τον θάνατο.
+        </p>
+      </div>
+      <div class="role-box judges">
+        <div class="badge blue">⚖️ Κριτές</div>
+        <p>
+          Παρακολουθούν το debate, σημειώνουν τη χρήση φράσεων από τα πρωτότυπα κείμενα
+          και αξιολογούν την πειστικότητα.
+        </p>
+      </div>
+    </div>
+
+    <textarea id="roles-notes" placeholder="Σημειώσεις για τη σύνθεση των ομάδων..."></textarea>
+
+    <div class="btn-row no-print">
+      <button class="secondary" type="button" data-prev>⟵ Προηγούμενο</button>
+      <button type="button" data-next>Επόμενο: Επιχειρήματα ➜</button>
+    </div>
+  </section>
+
+  <section class="card step">
+    <h2>Βήμα 4: Προετοιμασία Επιχειρημάτων</h2>
+    <p>
+      Συντάξτε τα επιχειρήματά σας αντλώντας στοιχεία από τα πλήρη κείμενα του Βήματος 1.
+    </p>
+
+    <div class="grid-2">
+      <div>
+        <h3>🎭 Επιχειρήματα Ρωμαίου</h3>
+        <div id="romeo-arguments"></div>
+        <button class="small no-print" type="button" onclick="addArgumentCard('romeo')">➕ Προσθήκη</button>
+      </div>
+
+      <div>
+        <h3>⚔️ Επιχειρήματα Ερωφίλης</h3>
+        <div id="erophile-arguments"></div>
+        <button class="small no-print" type="button" onclick="addArgumentCard('erophile')">➕ Προσθήκη</button>
+      </div>
+    </div>
+
+    <div class="btn-row no-print" style="margin-top:0.8rem;">
+      <button class="small secondary" type="button" onclick="printArguments()">🖨️ Αποθήκευση Επιχειρημάτων</button>
+    </div>
+
+    <div class="btn-row no-print">
+      <button class="secondary" type="button" data-prev>⟵ Προηγούμενο</button>
+      <button type="button" data-next>Επόμενο: Σενάρια ➜</button>
+    </div>
+  </section>
+
+  <section class="card step">
+  <h2>Βήμα 5: Σύγχρονα Σενάρια</h2>
+  <p>Πώς θα αντιδρούσαν οι ήρωες σε σημερινά διλήμματα;</p>
+
+    <button id="phrase-bank-toggle" class="small secondary no-print" type="button" onclick="togglePhraseBank()">
+      🗣️ Φράσεις-Κλειδιά από τα Κείμενα
+    </button>
+
+    <div id="phrase-bank" class="phrase-bank no-print" style="display:none;">
+      <h4>Ρωμαίος (Ουράνιος Λόγος)</h4>
+      <ul>
+        <li>«Είναι η ανατολή, ο ήλιος μου!»</li>
+        <li>«Τα μάτια της μιλάνε, θ’ απαντήσω!»</li>
+        <li>«Μοιάζεις με φτερωτό απεσταλμένο τ’ ουρανού.»</li>
+      </ul>
+
+      <h4>Ερωφίλη (Επίγειος Λόγος)</h4>
+      <ul>
+        <li>«Για σένα εγεννήθηκε στον κόσμο το κορμί μου.»</li>
+        <li>«Νερό δεν έσβησε φωτιά ποτέ.»</li>
+        <li>«Για λόγου του στον Άδη κατεβαίνω.»</li>
+      </ul>
+    </div>
+
+    <details class="scenario" data-romeo-id="scenario1-romeo" data-erophile-id="scenario1-erophile">
+      <summary>📱 Σενάριο 1 – Έρωτας στα Social Media</summary>
+      <p class="scenario-description">
+        Δύο νέοι ερωτεύονται μέσω Instagram βλέποντας μόνο φωτογραφίες και ανταλλάσσοντας likes,
+        χωρίς να έχουν συναντηθεί ποτέ από κοντά. Νιώθουν ότι βρήκαν το «απόλυτο».
+      </p>
+      <div class="grid-2 scenario-notes">
+        <div>
+          <h4>Οπτική Ρωμαίου</h4>
+          <textarea id="scenario1-romeo" placeholder="Ο Ρωμαίος θα το στήριζε; (Οπτική επαφή, θαυμασμός εικόνας...)"></textarea>
+        </div>
+        <div>
+          <h4>Οπτική Ερωφίλης</h4>
+          <textarea id="scenario1-erophile" placeholder="Τι θα έλεγε η Ερωφίλη; (Έλλειψη κοινής ζωής/ρίζας...)"></textarea>
+        </div>
+      </div>
+    </details>
+
+    <details class="scenario" data-romeo-id="scenario2-romeo" data-erophile-id="scenario2-erophile">
+      <summary>✈️ Σενάριο 2 – Σχέση από Απόσταση & Δυσκολίες</summary>
+      <p class="scenario-description">
+        Ένα ζευγάρι πρέπει να μείνει χωριστά για 5 χρόνια λόγω σπουδών. 
+        Οι φίλοι τους λένε να χωρίσουν για να βρουν κάτι πιο «βολικό» και «σίγουρο».
+      </p>
+      <div class="grid-2 scenario-notes">
+        <div>
+          <h4>Οπτική Ρωμαίου</h4>
+          <textarea id="scenario2-romeo" placeholder="Θα άντεχε ο Ρωμαίος χωρίς τη 'λάμψη' της παρουσίας της;"></textarea>
+        </div>
+        <div>
+          <h4>Οπτική Ερωφίλης</h4>
+          <textarea id="scenario2-erophile" placeholder="Πώς θα απαντούσε η Ερωφίλη; (Πίστη, όρκοι, φόβος...)"></textarea>
+        </div>
+      </div>
+    </details>
+
+    <div class="btn-row no-print">
+      <button class="secondary" type="button" data-prev>⟵ Προηγούμενο</button>
+      <button type="button" data-next>Debate &amp; Χρονόμετρο ➜</button>
+    </div>
+  </section>
+
+  <section class="card step">
+    <h2>Βήμα 6: Η Ώρα της Αντιπαράθεσης</h2>
+    
+    <h3>Χρονόμετρο</h3>
+    <div class="inline-inputs">
+      <label for="timer-minutes" class="muted">Λεπτά:</label>
+      <input type="number" id="timer-minutes" min="0" value="2">
+      <label for="timer-seconds" class="muted">Δευτ.:</label>
+      <input type="number" id="timer-seconds" min="0" max="59" value="0">
+      <label for="speaker-select" class="muted">Ομάδα:</label>
+      <select id="speaker-select">
+        <option value="Ρωμαίος">🎭 Ρωμαίος</option>
+        <option value="Ερωφίλη">⚔️ Ερωφίλη</option>
+      </select>
+    </div>
+
+    <div class="timer-display" id="timer-display">
+      <span id="display-min">02</span>:<span id="display-sec">00</span>
+    </div>
+    <p class="muted" id="current-speaker">Τώρα μιλά: Ρωμαίος</p>
+
+    <div class="btn-row no-print">
+      <button class="small" type="button" onclick="startTimer()">▶ Έναρξη</button>
+      <button class="small secondary" type="button" onclick="resetTimer()">⏹ Στοπ / Επαναφορά</button>
+    </div>
+
+    <div class="rubric-block">
+      <div class="rubric-title-row">
+        <strong>Αξιολόγηση (Rubric)</strong>
+        <span class="rubric-badge-round">Κλίμακα 1–4</span>
+      </div>
+
+      <div class="rubric-table">
+        <div class="rubric-row header">
+          <div>Κριτήριο</div>
+          <div class="rubric-col-label romeo-col">🎭 Ρωμαίος</div>
+          <div class="rubric-col-label erophile-col">⚔️ Ερωφίλη</div>
+        </div>
+
+        <div class="rubric-row">
+          <div class="rubric-label">Αναφορές στο κείμενο</div>
+          <div><input class="rubric-input rubric-input-romeo" type="number" min="1" max="4" id="rubric-romeo-1"></div>
+          <div><input class="rubric-input rubric-input-erophile" type="number" min="1" max="4" id="rubric-erophile-1"></div>
+        </div>
+
+        <div class="rubric-row">
+          <div class="rubric-label">Πειστικότητα & Ρητορική</div>
+          <div><input class="rubric-input rubric-input-romeo" type="number" min="1" max="4" id="rubric-romeo-2"></div>
+          <div><input class="rubric-input rubric-input-erophile" type="number" min="1" max="4" id="rubric-erophile-2"></div>
+        </div>
+
+        <div class="rubric-row">
+          <div class="rubric-label">Ποιότητα Αντιλόγου & Απάντηση</div>
+          <div><input class="rubric-input rubric-input-romeo" type="number" min="1" max="4" id="rubric-romeo-3"></div>
+          <div><input class="rubric-input rubric-input-erophile" type="number" min="1" max="4" id="rubric-erophile-3"></div>
+        </div>
+      </div>
+
+      <div class="rubric-buttons-row no-print">
+        <button class="small" type="button" onclick="calculateRoundScores()">📏 Υπολογισμός Βαθμολογίας</button>
+      </div>
+
+      <div id="round-results" class="round-results-text"></div>
+      
+      <div class="round-progress">
+        <div class="round-track" id="round-progress-track">
+          <div class="round-fill" id="round-progress-fill"></div>
+        </div>
+        <div id="round-progress-label" class="round-progress-label-text"></div>
+      </div>
+    </div>
+
+    <div class="btn-row no-print">
+      <button class="secondary" type="button" data-prev>⟵ Προηγούμενο</button>
+      <button type="button" data-next>Τελική Ψήφος ➜</button>
+    </div>
+  </section>
+
+  <section class="card step">
+    <h2>Βήμα 7: Τελική Ψηφοφορία</h2>
+    <p>Μετά το debate, άλλαξε η γνώμη σας;</p>
+
+    <div class="vote-inputs">
+      <div class="vote-box">
+        <strong>Υπέρ Ρωμαίου (μετά)</strong>
+        <input type="number" id="post-romeo" min="0" value="0">
+      </div>
+      <div class="vote-box">
+        <strong>Υπέρ Ερωφίλης (μετά)</strong>
+        <input type="number" id="post-erophile" min="0" value="0">
+      </div>
+      <div class="vote-box">
+        <strong>Αβέβαιοι (μετά)</strong>
+        <input type="number" id="post-unsure" min="0" value="0">
+      </div>
+    </div>
+
+    <button class="small no-print" type="button" onclick="calculatePostVote()">Υπολογισμός &amp; Σύγκριση</button>
+    <div id="post-results" class="vote-results"></div>
+    <div id="post-chart" class="bar-chart"></div>
+
+    <div class="btn-row no-print">
+      <button class="secondary" type="button" data-prev>⟵ Προηγούμενο</button>
+      <button type="button" data-next>Προφίλ Αγάπης ➜</button>
+    </div>
+  </section>
+
+  <section class="card step">
+    <h2>Βήμα 8: Το Προφίλ Αγάπης της Τάξης</h2>
+    <p>
+        Στα παρακάτω πεδία, εισάγετε <strong>πόσοι μαθητές</strong> ψήφισαν κάθε βαθμίδα (1-5).
+        <br><em>(Τα κουτάκια υπάρχουν για να υπολογιστεί αυτόματα ο μέσος όρος της τάξης).</em>
+    </p>
+
+    <div class="poll-block">
+      <strong>1. Ο έρωτας είναι κυρίως θέμα πρώτης ματιάς και έντονης έλξης;</strong>
+      <div class="likert-row">
+        <label class="likert-col"><span>1 (Διαφωνώ)</span><input type="number" id="love-visual-1" value="0" placeholder="Ψήφοι"></label>
+        <label class="likert-col"><span>2</span><input type="number" id="love-visual-2" value="0" placeholder="Ψήφοι"></label>
+        <label class="likert-col"><span>3</span><input type="number" id="love-visual-3" value="0" placeholder="Ψήφοι"></label>
+        <label class="likert-col"><span>4</span><input type="number" id="love-visual-4" value="0" placeholder="Ψήφοι"></label>
+        <label class="likert-col"><span>5 (Συμφωνώ)</span><input type="number" id="love-visual-5" value="0" placeholder="Ψήφοι"></label>
+      </div>
+    </div>
+
+    <div class="poll-block">
+      <strong>2. Η αγάπη αποδεικνύεται κυρίως μέσα από τη θυσία και την υπομονή;</strong>
+      <div class="likert-row">
+        <label class="likert-col"><span>1 (Διαφωνώ)</span><input type="number" id="love-pain-1" value="0" placeholder="Ψήφοι"></label>
+        <label class="likert-col"><span>2</span><input type="number" id="love-pain-2" value="0" placeholder="Ψήφοι"></label>
+        <label class="likert-col"><span>3</span><input type="number" id="love-pain-3" value="0" placeholder="Ψήφοι"></label>
+        <label class="likert-col"><span>4</span><input type="number" id="love-pain-4" value="0" placeholder="Ψήφοι"></label>
+        <label class="likert-col"><span>5 (Συμφωνώ)</span><input type="number" id="love-pain-5" value="0" placeholder="Ψήφοι"></label>
+      </div>
+    </div>
+
+    <button class="small no-print" type="button" onclick="computeLoveProfile()">📊 Υπολογισμός Προφίλ</button>
+
+    <div id="citizen-sliders" style="margin-top:1rem;">
+      <div class="range-row">
+        <label><span>Τάση προς Εξιδανίκευση (Ρωμαίος)</span><span id="val-visual">50</span></label>
+        <input type="range" id="range-visual" min="0" max="100" value="50">
+      </div>
+      <div class="range-row">
+        <label><span>Τάση προς Καρτερικότητα (Ερωφίλη)</span><span id="val-pain">50</span></label>
+        <input type="range" id="range-pain" min="0" max="100" value="50">
+      </div>
+    </div>
+
+    <div id="citizen-summary" class="card" style="margin-top:0.7rem; border-style:dashed;">
+      <p class="muted">Εδώ θα εμφανιστεί το συμπέρασμα...</p>
+    </div>
+
+    <button class="small no-print" type="button" onclick="printResults()">🖨️ Εκτύπωση αποτελεσμάτων PDF</button>
+
+    <div class="btn-row no-print">
+      <button class="secondary" type="button" data-prev>⟵ Προηγούμενο</button>
+      <button class="secondary" type="button" onclick="goToStep(0)">⬅ Επιστροφή στην Αρχή</button>
+    </div>
+  </section>
+</main>
+
+<div id="print-summary"></div>
+
+<footer>
+  ✨✍️ Δημιουργία: Παναγιώτης Δόμβρος, Εκπαιδευτικός Αγγλικών-Θεατρολόγος, Με την Επιφύλαξη Παντός Δικαιώματος ✍️✨
+</footer>
+
+<script>
+  /* --- JS Logic: Fullscreen Image Toggle --- */
+  function toggleFullscreen(img) {
+    if (img.classList.contains('img-fullscreen')) {
+      img.classList.remove('img-fullscreen');
+    } else {
+      img.classList.add('img-fullscreen');
+    }
+  }
+
+  /* --- JS Logic: Πλοήγηση --- */
+  const steps = Array.from(document.querySelectorAll('.step'));
+  const stepIndicator = document.getElementById('stepIndicator');
+  let currentStep = 0;
+
+  function buildStepDots() {
+    stepIndicator.innerHTML = '';
+    steps.forEach((_, idx) => {
+      const dot = document.createElement('div');
+      dot.className = 'step-dot' + (idx === 0 ? ' active' : '');
+      stepIndicator.appendChild(dot);
+    });
+  }
+
+  function updateStepDots() {
+    const dots = stepIndicator.querySelectorAll('.step-dot');
+    dots.forEach((dot, idx) => dot.classList.toggle('active', idx === currentStep));
+  }
+
+  function showStep(index) {
+    if (index < 0 || index >= steps.length) return;
+    steps.forEach((step, i) => step.classList.toggle('active', i === index));
+    currentStep = index;
+    updateStepDots();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function goToStep(index) { showStep(index); }
+  document.querySelectorAll('[data-next]').forEach(btn => btn.addEventListener('click', () => { if (currentStep < steps.length - 1) showStep(currentStep + 1); }));
+  document.querySelectorAll('[data-prev]').forEach(btn => btn.addEventListener('click', () => { if (currentStep > 0) showStep(currentStep - 1); }));
+
+  buildStepDots();
+
+  /* --- JS Logic: Ψηφοφορίες --- */
+  let preVote = { romeo: 0, erophile: 0, unsure: 0 };
+
+  function calculatePreVote() {
+    const r = parseInt(document.getElementById('pre-romeo').value) || 0;
+    const e = parseInt(document.getElementById('pre-erophile').value) || 0;
+    const u = parseInt(document.getElementById('pre-unsure').value) || 0;
+    const total = r + e + u;
+    preVote = { romeo: r, erophile: e, unsure: u };
+
+    const resEl = document.getElementById('pre-results');
+    const chartEl = document.getElementById('pre-chart');
+    if (total === 0) { resEl.textContent = 'Καμία ψήφος.'; chartEl.innerHTML = ''; return; }
+
+    const pr = ((r/total)*100).toFixed(1);
+    const pe = ((e/total)*100).toFixed(1);
+    const pu = ((u/total)*100).toFixed(1);
+
+    resEl.innerHTML = `Σύνολο: ${total}. Ρωμαίος: ${r} (${pr}%), Ερωφίλη: ${e} (${pe}%), Αβέβαιοι: ${u}.`;
+    chartEl.innerHTML = '';
+    chartEl.appendChild(makeBarRow('Ρωμαίος', pr, 'romeo'));
+    chartEl.appendChild(makeBarRow('Ερωφίλη', pe, 'erophile'));
+    chartEl.appendChild(makeBarRow('Αβέβαιοι', pu, 'unsure'));
+  }
+
+  function calculatePostVote() {
+    const r = parseInt(document.getElementById('post-romeo').value) || 0;
+    const e = parseInt(document.getElementById('post-erophile').value) || 0;
+    const u = parseInt(document.getElementById('post-unsure').value) || 0;
+    const total = r + e + u;
+
+    const chartEl = document.getElementById('post-chart');
+    const resEl = document.getElementById('post-results');
+    if (total === 0) { resEl.textContent = 'Καμία ψήφος.'; chartEl.innerHTML = ''; return; }
+
+    const pr = ((r/total)*100).toFixed(1);
+    const pe = ((e/total)*100).toFixed(1);
+    const pu = ((u/total)*100).toFixed(1);
+    const diffR = r - preVote.romeo;
+    const diffE = e - preVote.erophile;
+    
+    resEl.innerHTML = `Ρωμαίος: ${r} (${diffR >= 0 ? '+' : ''}${diffR}), Ερωφίλη: ${e} (${diffE >= 0 ? '+' : ''}${diffE}).`;
+    
+    chartEl.innerHTML = '';
+    chartEl.appendChild(makeBarRow('Ρωμαίος (μετά)', pr, 'romeo'));
+    chartEl.appendChild(makeBarRow('Ερωφίλη (μετά)', pe, 'erophile'));
+  }
+
+  function makeBarRow(label, percent, type) {
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    const labelEl = document.createElement('div'); labelEl.className = 'bar-label'; labelEl.textContent = label;
+    const track = document.createElement('div'); track.className = 'bar-track';
+    const fill = document.createElement('div'); fill.className = 'bar-fill';
+    if (type === 'erophile') fill.classList.add('alt');
+    if (type === 'unsure') fill.classList.add('neutral');
+    fill.style.width = Math.max(parseFloat(percent), 1) + '%';
+    const pct = document.createElement('div'); pct.textContent = percent + '%';
+    track.appendChild(fill); row.append(labelEl, track, pct);
+    return row;
+  }
+
+  /* --- JS Logic: Επιχειρήματα --- */
+  function addArgumentCard(side) {
+    const containerId = side === 'romeo' ? 'romeo-arguments' : 'erophile-arguments';
+    const container = document.getElementById(containerId);
+    const card = document.createElement('div'); card.className = 'arg-card';
+    card.innerHTML = `<div class="arg-card-title">Επιχείρημα</div><textarea placeholder="Διατύπωση..."></textarea><textarea placeholder="Στήριξη από το κείμενο..."></textarea>`;
+    container.appendChild(card);
+  }
+
+  /* --- JS Logic: Χρονόμετρο --- */
+  let timerInterval = null, remainingSeconds = 0;
+  function updateTimerDisplay() {
+    document.getElementById('display-min').textContent = String(Math.floor(remainingSeconds / 60)).padStart(2, '0');
+    document.getElementById('display-sec').textContent = String(remainingSeconds % 60).padStart(2, '0');
+  }
+  function startTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+    const min = parseInt(document.getElementById('timer-minutes').value) || 0;
+    const sec = parseInt(document.getElementById('timer-seconds').value) || 0;
+    remainingSeconds = min * 60 + sec;
+    document.getElementById('current-speaker').textContent = 'Τώρα μιλά: ' + document.getElementById('speaker-select').value;
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+      remainingSeconds--; updateTimerDisplay();
+      if (remainingSeconds <= 0) { clearInterval(timerInterval); alert('Τέλος χρόνου!'); }
+    }, 1000);
+  }
+  function resetTimer() { if (timerInterval) clearInterval(timerInterval); remainingSeconds = 0; updateTimerDisplay(); }
+
+  /* --- JS Logic: Rubric --- */
+  function calculateRoundScores() {
+    let r = 0, e = 0;
+    // Ενημέρωση για 3 κριτήρια
+    for(let i=1; i<=3; i++) {
+        r += parseInt(document.getElementById('rubric-romeo-'+i).value)||0;
+        e += parseInt(document.getElementById('rubric-erophile-'+i).value)||0;
+    }
+    const total = r + e;
+    document.getElementById('round-results').innerHTML = `Ρωμαίος: <strong>${r}</strong> – Ερωφίλη: <strong>${e}</strong>`;
+    if (total > 0) {
+        document.getElementById('round-progress-fill').style.width = ((r/total)*100) + '%';
+    }
+  }
+
+  /* --- JS Logic: Προφίλ --- */
+  function computeLoveProfile() {
+    let visual = 0, pain = 0;
+    let countV = 0, countP = 0;
+    
+    for(let i=1; i<=5; i++) {
+        let vVal = parseInt(document.getElementById('love-visual-'+i).value)||0;
+        visual += vVal * i; 
+        countV += vVal;
+
+        let pVal = parseInt(document.getElementById('love-pain-'+i).value)||0;
+        pain += pVal * i;
+        countP += pVal;
+    }
+    
+    // Μετατροπή σε ποσοστό (μέσος όρος)
+    // Τύπος: (Weighted Sum / Total Votes) * 20 για να πάει στο 100
+    let visPct = countV > 0 ? (visual / countV) * 20 : 0; 
+    let painPct = countP > 0 ? (pain / countP) * 20 : 0;
+
+    document.getElementById('range-visual').value = visPct;
+    document.getElementById('range-pain').value = painPct;
+    document.getElementById('val-visual').textContent = visPct.toFixed(0);
+    document.getElementById('val-pain').textContent = painPct.toFixed(0);
+    
+    document.getElementById('citizen-summary').innerHTML = `<p>Με βάση τις απαντήσεις (${countV} ψήφοι), η τάξη δείχνει τάση ${visPct.toFixed(0)}% προς την Εξιδανίκευση και ${painPct.toFixed(0)}% προς την Καρτερικότητα.</p>`;
+  }
+
+  /* --- JS Logic: Print --- */
+  function printResults() {
+    const c = document.getElementById('print-summary');
+    c.innerHTML = `<h1>Αποτελέσματα: Ερωφίλη vs Ρωμαίος</h1>` + 
+                  document.getElementById('pre-results').innerHTML + '<br>' +
+                  document.getElementById('post-results').innerHTML + '<br>' + 
+                  document.getElementById('citizen-summary').innerHTML;
+    window.print();
+  }
+  function printArguments() { window.print(); }
+  function togglePhraseBank() {
+    const x = document.getElementById('phrase-bank');
+    x.style.display = x.style.display === 'none' ? 'block' : 'none';
+  }
+
+  // Initial setup
+  addArgumentCard('romeo'); addArgumentCard('erophile');
+</script>
+</body>
+</html>
